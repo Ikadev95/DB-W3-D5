@@ -1,0 +1,8 @@
+Un utente può avere più prestiti ma ogni prestito è associato ad un solo utente
+la relazione è quindi uno a molti (1,n)
+
+Il prestito è riferito ad una sola pubblicazione ma una pubblicazione può essere associata a più prestiti
+la relazione è quindi uno a molti (1,n)
+
+L'archivio può contenere più pubblicazioni ma ogni pubblicazione è associata ad un solo archivio
+la relazione è quindi 1 a molti (1,n)
