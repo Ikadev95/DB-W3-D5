@@ -28,6 +28,9 @@ public class Application {
         if (pubblicazione != null) {
             System.out.println("Pubblicazione trovata per ISBN: " + pubblicazione.getTitolo());
         }
+        else {
+            System.out.println("non sono state trovate pubblicazioni per questo ISBN");
+        }
     }
 
     public static void ricercaPubblicazionePerAnno(PubblicazioneDAO pubblicazioneDAO, LocalDate anno) {
@@ -35,12 +38,18 @@ public class Application {
         if (pubblicazione != null) {
             System.out.println("Pubblicazione trovata per anno: " + pubblicazione.getTitolo());
         }
+        else {
+            System.out.println("non è stata trovata nessuna pubblicazione per l'anno inserito");
+        }
     }
 
     public static void ricercaLibroPerAutore(LibroDAO libroDAO, String autore) {
         Libro libro = libroDAO.findByAuthor(autore);
         if (libro != null) {
             System.out.println("Libro trovato per autore: " + libro.getTitolo());
+        }
+        else {
+            System.out.println("libro non trovato");
         }
     }
 
@@ -61,6 +70,9 @@ public class Application {
             em.remove(pubblicazioneDaRimuovere);
             em.getTransaction().commit();
             System.out.println("Pubblicazione rimossa dal catalogo: " + pubblicazioneDaRimuovere.getTitolo());
+        }
+        else {
+            System.out.println("pubblicazione da rimuovere non trovata");
         }
     }
 

@@ -1,8 +1,6 @@
 package it.epicode.dao;
 
 import it.epicode.entity.Prestito;
-import it.epicode.entity.Utente;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 

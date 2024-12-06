@@ -1,8 +1,6 @@
 package it.epicode.dao;
 
 import it.epicode.entity.Libro;
-import it.epicode.entity.Pubblicazione;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
