@@ -11,9 +11,11 @@ import java.util.List;
 @Entity
 @Table(name = "pubblicazioni")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_pubblicazione", discriminatorType = DiscriminatorType.STRING)
 
-@NamedQuery(name = "get_by_isbn", query = "SELECT p FROM Pubblicazione WHERE p.isbn = :isbn ")
-@NamedQuery(name = "get_by_yearp", query = "SELECT p FROM Pubblicazione Where p.anno_di_pubblicazione = :anno_di_pubblicazione")
+@NamedQuery(name = "get_by_isbn", query = "SELECT p FROM Pubblicazione p WHERE p.ISBN = :isbn")
+@NamedQuery(name = "get_by_yearp", query = "SELECT p FROM Pubblicazione p WHERE p.anno_di_pubblicazione = :anno_di_pubblicazione")
+@NamedQuery(name = "get_by_title", query = "SELECT p FROM Pubblicazione p WHERE p.titolo LIKE :title")
 public class Pubblicazione {
 
     @Id
@@ -33,7 +35,7 @@ public class Pubblicazione {
     @Getter
     @Setter
     @Column (name = "anno_di_pubblicazione")
-    private LocalDate annoDiPubblicazione;
+    private LocalDate anno_di_pubblicazione;
 
     @Getter
     @Setter

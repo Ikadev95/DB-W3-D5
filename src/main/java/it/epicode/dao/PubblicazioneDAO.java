@@ -24,10 +24,16 @@ public class PubblicazioneDAO {
                 .getSingleResult();
     }
 
-    public Pubblicazione findByYearp (LocalDate dateP){
+    public Pubblicazione findByYearp(LocalDate annoDiPubblicazione) {
         return em.createNamedQuery("get_by_yearp", Pubblicazione.class)
-                .setParameter("dateP",dateP)
+                .setParameter("anno_di_pubblicazione", annoDiPubblicazione)
                 .getSingleResult();
+    }
+
+    public List<Pubblicazione> findBytitle(String title){
+        return em.createNamedQuery("get_by_title", Pubblicazione.class)
+                .setParameter("title", "%" + title + "%")
+                .getResultList();
     }
 
     public Pubblicazione findById(Long id) {
@@ -49,6 +55,4 @@ public class PubblicazioneDAO {
         em.remove(oggetto);
         em.getTransaction().commit();
     }
-
-
 }

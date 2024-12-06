@@ -28,7 +28,6 @@ public class Prestito {
     @Setter
     @ManyToOne
     @JoinColumn(name = "utente_id", nullable = false)
-    @Column(name = "utente", nullable = false)
     private Utente utente;
 
     @Getter
@@ -49,7 +48,7 @@ public class Prestito {
 
     @Getter
     @Setter
-    @Column(name = "data_restituzione_effettiva", nullable = false)
+    @Column(name = "data_restituzione_effettiva")
     private LocalDate dataRestituzioneEffettiva;
 
 }

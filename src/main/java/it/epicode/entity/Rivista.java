@@ -10,7 +10,7 @@ import lombok.Data;
 public class Rivista extends Pubblicazione {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "periodicita", nullable = false)
+    @Column(name = "periodicita")
     private Periodicita periodicita;
 
 

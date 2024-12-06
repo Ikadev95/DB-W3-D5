@@ -1,63 +1,93 @@
 package it.epicode;
 
-
+import it.epicode.dao.CatalogoDAO;
 import it.epicode.dao.PubblicazioneDAO;
+import it.epicode.dao.LibroDAO;
 import it.epicode.entity.Catalogo;
 import it.epicode.entity.Pubblicazione;
+import it.epicode.entity.Libro;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.logging.Logger;
+import java.util.List;
 
 public class Application {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("unit-jpa");
-    EntityManager em = emf.createEntityManager();
-    private static final Logger LOGGER = (Logger) LoggerFactory.getLogger(Application.class);
-
     public static void main(String[] args) {
 
+        // Creazione dell'EntityManagerFactory e EntityManager
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("unit-jpa");
+        EntityManager em = emf.createEntityManager();
+
+        // Creazione delle DAO
+        CatalogoDAO catalogoDAO = new CatalogoDAO(em);
+        PubblicazioneDAO pubblicazioneDAO = new PubblicazioneDAO(em);
+        LibroDAO libroDAO = new LibroDAO(em);
+
+        // Creazione di un nuovo catalogo
         Catalogo catalogo = new Catalogo();
+        catalogoDAO.save(catalogo);
+        System.out.println("Catalogo creato e salvato con successo.");
+
+        // Creazione di una nuova pubblicazione di tipo Libro
+        Libro pubblicazione1 = new Libro();
+        pubblicazione1.setISBN(3456);
+        pubblicazione1.setTitolo("Storia della Programmazione");
+        pubblicazione1.setAnno_di_pubblicazione(LocalDate.of(2020, 5, 10));
+        pubblicazione1.setAutore("Nome Autore");
+        pubblicazione1.setGenere("Programmazione");
 
 
-
-    }
-
-
-    public void aggiungiACatalogo(Pubblicazione p , Catalogo c){
+        // Aggiunta della pubblicazione al catalogo
         em.getTransaction().begin();
-        c.getPubblicazioni().add(p);
-        p.setCatalogo(c);
-        em.persist(c);
-        em.persist(p);
+        catalogo.getPubblicazioni().add(pubblicazione1);
+        pubblicazione1.setCatalogo(catalogo);
+        em.persist(pubblicazione1);
+        em.merge(catalogo);
         em.getTransaction().commit();
-        System.out.println("aggiunto al catalogo");
-    }
+        System.out.println("Pubblicazione aggiunta al catalogo: " + pubblicazione1.getTitolo());
 
-   public void rimuoviDaCatalogo(int isbn, Catalogo c){
+        // Ricerca di una pubblicazione per ISBN
+        Pubblicazione pubblicazioneRicercata = pubblicazioneDAO.findByIsbn(3456);  // ISBN corretto
+        if (pubblicazioneRicercata != null) {
+            System.out.println("Pubblicazione trovata per ISBN: " + pubblicazioneRicercata.getTitolo());
+        }
+
+        // Ricerca di una pubblicazione per anno
+        Pubblicazione pubblicazionePerAnno = pubblicazioneDAO.findByYearp(LocalDate.of(2020, 5, 10));
+        if (pubblicazionePerAnno != null) {
+            System.out.println("Pubblicazione trovata per anno: " + pubblicazionePerAnno.getTitolo());
+        }
+
+        // Ricerca di una pubblicazione per autore
+        Libro libro = libroDAO.findByAuthor("Nome Autore");
+        if (libro != null) {
+            System.out.println("Libro trovato per autore: " + libro.getTitolo());
+        }
+
+        // Ricerca di pubblicazioni per titolo
+        List<Pubblicazione> pubblicazioniPerTitolo = pubblicazioneDAO.findBytitle("Storia");
+        System.out.println("Pubblicazioni trovate per titolo: ");
+        for (Pubblicazione p : pubblicazioniPerTitolo) {
+            System.out.println(p.getTitolo());
+        }
+
+/*        // Rimozione di una pubblicazione dal catalogo
         em.getTransaction().begin();
-       PubblicazioneDAO PubbDao = new PubblicazioneDAO(em);
-       Pubblicazione p = PubbDao.findByIsbn(isbn);
-       if(p != null){
-           c.getPubblicazioni().remove(p);
-           em.merge(c);
-           em.merge(p);
-           em.getTransaction().commit();
-           System.out.println("rimosso dal catalogo");
-       }
-    }
+        Pubblicazione pubblicazioneDaRimuovere = pubblicazioneDAO.findByIsbn(3456);
+        if (pubblicazioneDaRimuovere != null) {
+            catalogo.getPubblicazioni().remove(pubblicazioneDaRimuovere);
+            em.merge(catalogo);
+            em.remove(pubblicazioneDaRimuovere);
+            em.getTransaction().commit();
+            System.out.println("Pubblicazione rimossa dal catalogo: " + pubblicazioneDaRimuovere.getTitolo());
+        }*/
 
-    public Pubblicazione ricercaPerIsbn (int isbn){
-        PubblicazioneDAO PubbDao = new PubblicazioneDAO(em);
-        return PubbDao.findByIsbn(isbn);
+        // Chiusura dell'EntityManager
+        em.close();
+        emf.close();
     }
-
-    public Pubblicazione ricercaPerAnnoPubblicazione (LocalDate annoP){
-        PubblicazioneDAO PubbDao = new PubblicazioneDAO(em);
-        return PubbDao.findByYearp(annoP);
-    }
-
 }
