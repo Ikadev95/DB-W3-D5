@@ -1,10 +1,13 @@
 package it.epicode.dao;
 
+import it.epicode.entity.Prestito;
+import it.epicode.entity.Pubblicazione;
 import it.epicode.entity.Utente;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -36,6 +39,19 @@ public class UtenteDAO {
         em.remove(oggetto);
         em.getTransaction().commit();
     }
+
+    public List<Prestito> getPrestitiByTessera(int numero_di_tessera) {
+        List<Utente> utenti = em.createNamedQuery("get_by_card", Utente.class)
+                .setParameter("numero_di_tessera", numero_di_tessera)
+                .getResultList();
+
+        if (utenti.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Utente utente = utenti.getFirst();
+        return utente.getPrestiti();
+    }
+
 
 
 }

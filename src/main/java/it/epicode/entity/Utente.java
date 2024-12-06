@@ -10,6 +10,7 @@ import java.util.List;
 
 @Data
 @Entity
+@NamedQuery(name = "get_by_card", query = "SELECT u FROM Utente u WHERE u.numero_di_tessera = :numero_di_tessera ")
 public class Utente {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -33,7 +34,7 @@ public class Utente {
     @Getter
     @Setter
     @Column (name = "numero_di_tessera", nullable = false)
-    private int numeroDiTessera;
+    private int numero_di_tessera;
 
     @Getter
     @Setter

@@ -1,10 +1,12 @@
 package it.epicode.dao;
 
 import it.epicode.entity.Prestito;
+import it.epicode.entity.Utente;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -35,6 +37,12 @@ public class PrestitoDAO {
         em.getTransaction().begin();
         em.remove(oggetto);
         em.getTransaction().commit();
+    }
+
+    public List<Prestito> getExpired (){
+        return em.createNamedQuery("get_expired", Prestito.class)
+                .setParameter("currentDate", LocalDate.now())
+                .getResultList();
     }
 
 
